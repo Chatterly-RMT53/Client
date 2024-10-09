@@ -10,7 +10,7 @@ import initialize from "@/config/firebase";
 import { collection, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
 
-export default function RoomList({roomId, setRoomId}) {
+export default function RoomList({ roomId, setRoomId }) {
   const { firestore } = initialize();
   const [rooms, setRooms] = useState([]);
   const collectionRooms = collection(firestore, "rooms");
@@ -30,14 +30,20 @@ export default function RoomList({roomId, setRoomId}) {
 
   return (
     <>
-    <div className="space-y-4 w-full">
-      {rooms.map((r) => (
-        <Card className="cursor-pointer" key={r.id} onClick={()=>{setRoomId(r.id)}}>
-          <CardHeader>
-            <CardTitle>{r.name}</CardTitle>
-          </CardHeader>
-        </Card>
-      ))}
+      <div className="w-full space-y-4">
+        {rooms.map((r) => (
+          <Card
+            className="cursor-pointer rounded-md"
+            key={r.id}
+            onClick={() => {
+              setRoomId(r.id);
+            }}
+          >
+            <CardHeader>
+              <CardTitle>{r.name}</CardTitle>
+            </CardHeader>
+          </Card>
+        ))}
       </div>
     </>
   );
