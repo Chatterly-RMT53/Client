@@ -30,7 +30,15 @@ export default function Home() {
               className="mr-8 hidden md:block"
             />
             <div className="min-h-[65vh] flex-1">
-              {roomId && <MessageList roomId={roomId} />}
+              {roomId ? (
+                <MessageList roomId={roomId} />
+              ) : (
+                <>
+                  <h1 className="py-20 text-center text-4xl font-bold">
+                    Please select a chat room
+                  </h1>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
@@ -10,16 +10,44 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Link } from "react-router-dom";
 import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
-import { signOut } from "firebase/auth";
+import { signOut, updateProfile } from "firebase/auth";
 import initialize from "@/config/firebase";
 import useAuth from "@/hooks/useAuth";
+import {
+  Dialog,
+  DialogHeader,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { useToast } from "@/hooks/useToast";
 
 const Navbar = (props) => {
   const { className, hamburgerAction } = props;
   const { auth } = initialize();
   const { user } = useAuth();
+  const { toast } = useToast();
+
+  const [username, setUsername] = useState(user.providerData[0]?.displayName);
+  const [photoURL, setPhotoURL] = useState(user.providerData[0]?.photoURL);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    updateProfile(auth.currentUser, {
+      displayName: username,
+      photoURL,
+    }).then(() => {
+      toast({
+        title: "Success",
+        description: "Profile updated",
+      });
+    });
+  };
 
   return (
     <div className={className}>
@@ -40,14 +68,50 @@ const Navbar = (props) => {
                         `anonymous-${user.uid.slice(0, 5)}`}
                     </p>
                     <Avatar>
-                      <AvatarImage src="https://github.com/shadcn.png" />
-                      <AvatarFallback>CN</AvatarFallback>
+                      <AvatarImage src={user.providerData[0]?.photoURL} />
+                      <AvatarFallback>
+                        {user.providerData[0]?.displayname || "A"}
+                      </AvatarFallback>
                     </Avatar>
                   </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuLabel>
-                    <Link to="/profile">Profile</Link>
+                    <Dialog>
+                      <DialogTrigger>Profile</DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Profile Setting</DialogTitle>
+                          <DialogDescription>
+                            <form onSubmit={handleSubmit}>
+                              <div className="my-4">
+                                <Label>Username</Label>
+                                <Input
+                                  placeholder="Your Username"
+                                  value={username}
+                                  onChange={(event) =>
+                                    setUsername(event.target.value)
+                                  }
+                                />
+                              </div>
+                              <div className="my-4">
+                                <Label>Photo URL</Label>
+                                <Input
+                                  placeholder="Your Photo URL"
+                                  value={photoURL}
+                                  onChange={(event) =>
+                                    setPhotoURL(event.target.value)
+                                  }
+                                />
+                              </div>
+                              <div className="mt-8 flex justify-end">
+                                <Button type="submit">Save</Button>
+                              </div>
+                            </form>
+                          </DialogDescription>
+                        </DialogHeader>
+                      </DialogContent>
+                    </Dialog>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuLabel
