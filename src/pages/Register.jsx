@@ -18,7 +18,7 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const submit = async (event) => {
+  const submit = (event) => {
     event.preventDefault();
     setIsLoading(true);
     createUserWithEmailAndPassword(auth, email, password)
@@ -27,6 +27,18 @@ export default function Register() {
           toast({
             title: "Failed",
             description: "Email already in use",
+            variant: "destructive",
+          });
+        } else if (err.code === "auth/weak-password") {
+          toast({
+            title: "Failed",
+            description: "Password is too weak",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Failed",
+            description: "Failed to create account",
             variant: "destructive",
           });
         }
@@ -54,6 +66,7 @@ export default function Register() {
                 id="email"
                 type="email"
                 placeholder="you@mail.com"
+                value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 required
               />
@@ -64,6 +77,7 @@ export default function Register() {
                 id="password"
                 type="password"
                 placeholder="********"
+                value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 required
               />
