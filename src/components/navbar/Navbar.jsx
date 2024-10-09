@@ -76,43 +76,45 @@ const Navbar = (props) => {
                   </div>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuLabel>
-                    <Dialog>
-                      <DialogTrigger>Profile</DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>Profile Setting</DialogTitle>
-                          <DialogDescription>
-                            <form onSubmit={handleSubmit}>
-                              <div className="my-4">
-                                <Label>Username</Label>
-                                <Input
-                                  placeholder="Your Username"
-                                  value={username}
-                                  onChange={(event) =>
-                                    setUsername(event.target.value)
-                                  }
-                                />
-                              </div>
-                              <div className="my-4">
-                                <Label>Photo URL</Label>
-                                <Input
-                                  placeholder="Your Photo URL"
-                                  value={photoURL}
-                                  onChange={(event) =>
-                                    setPhotoURL(event.target.value)
-                                  }
-                                />
-                              </div>
-                              <div className="mt-8 flex justify-end">
-                                <Button type="submit">Save</Button>
-                              </div>
-                            </form>
-                          </DialogDescription>
-                        </DialogHeader>
-                      </DialogContent>
-                    </Dialog>
-                  </DropdownMenuLabel>
+                  {!user.isAnonymous && (
+                    <DropdownMenuLabel>
+                      <Dialog>
+                        <DialogTrigger>Profile</DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Profile Setting</DialogTitle>
+                            <DialogDescription>
+                              <form onSubmit={handleSubmit}>
+                                <div className="my-4">
+                                  <Label>Username</Label>
+                                  <Input
+                                    placeholder="Your Username"
+                                    value={username}
+                                    onChange={(event) =>
+                                      setUsername(event.target.value)
+                                    }
+                                  />
+                                </div>
+                                <div className="my-4">
+                                  <Label>Photo URL</Label>
+                                  <Input
+                                    placeholder="Your Photo URL"
+                                    value={photoURL}
+                                    onChange={(event) =>
+                                      setPhotoURL(event.target.value)
+                                    }
+                                  />
+                                </div>
+                                <div className="mt-8 flex justify-end">
+                                  <Button type="submit">Save</Button>
+                                </div>
+                              </form>
+                            </DialogDescription>
+                          </DialogHeader>
+                        </DialogContent>
+                      </Dialog>
+                    </DropdownMenuLabel>
+                  )}
                   <DropdownMenuSeparator />
                   <DropdownMenuLabel
                     className="cursor-pointer"
