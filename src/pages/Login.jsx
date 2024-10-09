@@ -6,21 +6,59 @@ import { Separator } from "@/components/ui/separator";
 import { Link } from "react-router-dom";
 
 import initialize from "@/config/firebase";
-import { signInAnonymously } from "firebase/auth";
+import { signInAnonymously, signInWithEmailAndPassword } from "firebase/auth";
 import { useToast } from "@/hooks/useToast";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 export default function Login() {
   const { auth } = initialize();
   const { toast } = useToast();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const submit = (event) => {
+    event.preventDefault();
+    setIsLoading(true);
+    signInWithEmailAndPassword(auth, email, password)
+      .catch((err) => {
+        if (err.code == "auth/invalid-email") {
+          toast({
+            title: "Failed",
+            description: "Email is invalid",
+            variant: "destructive",
+          });
+        } else if (err.code == "auth/user-not-found") {
+          toast({
+            title: "Failed",
+            description: "User is not registered",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Failed",
+            description: "Failed to sign in",
+            variant: "destructive",
+          });
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
 
   const anonymousSignIn = () => {
-    signInAnonymously(auth).catch(() => {
-      toast({
-        title: "Failed",
-        description: "Failed to sign in anonymously",
-        variant: "destructive",
-      });
-    });
+    setIsLoading(true);
+    signInAnonymously(auth)
+      .catch(() => {
+        toast({
+          title: "Failed",
+          description: "Failed to sign in anonymously",
+          variant: "destructive",
+        });
+      })
+      .finally(() => setIsLoading(false));
   };
 
   return (
@@ -29,7 +67,7 @@ export default function Login() {
       id="main"
     >
       <Card className="mx-auto w-[450px] rounded-sm p-8">
-        <form>
+        <form onSubmit={submit}>
           <div className="text-center">
             <h2 className="text-3xl font-bold text-gray-900">Welcome back</h2>
             <p className="mt-2 text-sm text-gray-600">
@@ -43,6 +81,8 @@ export default function Login() {
                 id="email"
                 type="email"
                 placeholder="you@mail.com"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
                 required
               />
             </div>
@@ -52,11 +92,14 @@ export default function Login() {
                 id="password"
                 type="password"
                 placeholder="********"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
                 required
               />
             </div>
           </div>
-          <Button className="w-full" type="submit">
+          <Button className="w-full" type="submit" disabled={isLoading}>
+            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Login
           </Button>
         </form>
