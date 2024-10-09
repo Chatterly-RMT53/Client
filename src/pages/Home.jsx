@@ -14,7 +14,7 @@ export default function Home() {
       <div className="container">
         <div className="flex gap-x-10">
           <div
-            className={`absolute bottom-0 left-0 right-0 top-0 w-full flex-1 flex-col bg-white md:relative md:block md:max-w-[300px] ${isMenuOpen ? "flex" : "hidden"}`}
+            className={`absolute bottom-0 left-0 right-0 top-0 z-[100] w-full flex-1 flex-col bg-white md:relative md:block md:max-w-[300px] ${isMenuOpen ? "flex" : "hidden"}`}
           >
             <Navbar
               className="md:hidden"
