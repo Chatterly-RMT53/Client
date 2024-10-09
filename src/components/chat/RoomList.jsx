@@ -32,10 +32,9 @@ export default function RoomList({roomId, setRoomId}) {
     <>
     <div className="space-y-4 w-full">
       {rooms.map((r) => (
-        <Card onClick={()=>{setRoomId(r.id)}}>
+        <Card className="cursor-pointer" key={r.id} onClick={()=>{setRoomId(r.id)}}>
           <CardHeader>
             <CardTitle>{r.name}</CardTitle>
-            {/* <CardDescription>{r.createdAt}</CardDescription> */}
           </CardHeader>
         </Card>
       ))}
