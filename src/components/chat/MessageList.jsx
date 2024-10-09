@@ -10,6 +10,7 @@ import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import useAuth from "@/hooks/useAuth";
+import { ScrollArea } from "../ui/scroll-area";
 
 const MessageList = ({ roomId }) => {
   const [messages, setMessages] = useState([]);
@@ -37,20 +38,22 @@ const MessageList = ({ roomId }) => {
   };
 
   return (
-    <div className="flex min-h-[65vh] flex-col justify-between">
-      <div className="space-y-4">
-        {messages.map((m, i) => (
-          <div
-            key={i}
-            className={`text-md flex p-4 ${m.uid == user.uid && "justify-end"}`}
-          >
-            <div className={`${m.uid == user.uid && "text-right"} `}>
-              <strong>{m.name}</strong>
-              <p>{m.text}</p>
+    <div className="flex flex-col justify-between">
+      <ScrollArea className="h-[60vh]">
+        <div className="space-y-4">
+          {messages.map((m, i) => (
+            <div
+              key={i}
+              className={`text-md flex p-4 ${m.uid == user.uid && "justify-end"}`}
+            >
+              <div className={`${m.uid == user.uid && "text-right"} `}>
+                <strong>{m.name}</strong>
+                <p>{m.text}</p>
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      </ScrollArea>
       <div>
         <Separator orientation="horizontal" />
         <div className="mt-8">
