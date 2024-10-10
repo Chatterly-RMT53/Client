@@ -21,12 +21,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 const MessageList = ({ roomId }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const { firestore, auth } = initialize();
+  const { firestore } = initialize();
   const { user } = useAuth();
   useEffect(() => {
-    updateProfile(auth.currentUser, {
-      displayName: "Jalu",
-    });
     onSnapshot(
       query(
         collection(firestore, `rooms/${roomId}/messages`),

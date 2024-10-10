@@ -75,10 +75,10 @@ const Navbar = (props) => {
                     </Avatar>
                   </div>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent>
+                <DropdownMenuContent className="z-[1000]">
                   {!user.isAnonymous && (
                     <DropdownMenuLabel>
-                      <Dialog>
+                      <Dialog className="z-[1001]">
                         <DialogTrigger>Profile</DialogTrigger>
                         <DialogContent>
                           <DialogHeader>
