@@ -9,7 +9,8 @@ import {
 import initialize from "@/config/firebase";
 import { addDoc, collection, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { Button } from "../ui/button";
+import { useToast } from "@/hooks/useToast";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -17,15 +18,14 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
-import { Input } from "../ui/input";
-import { useToast } from "@/hooks/useToast";
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 
 export default function RoomList({ roomId, setRoomId }) {
   const { toast } = useToast();
+  const [newRoom, setNewRoom] = useState("");
   const { firestore } = initialize();
   const [rooms, setRooms] = useState([]);
-  const [newRoom, setNewRoom] = useState("");
   const collectionRooms = collection(firestore, "rooms");
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export default function RoomList({ roomId, setRoomId }) {
   return (
     <>
       <div>
-        <Dialog>
+        <Dialog className="z-[1000]">
           <DialogTrigger asChild>
             <Button className="mb-4 w-full">Create Room</Button>
           </DialogTrigger>
